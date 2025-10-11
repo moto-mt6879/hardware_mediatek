@@ -1,0 +1,32 @@
+//
+// SPDX-FileCopyrightText: The LineageOS Project
+// SPDX-License-Identifier: Apache-2.0
+//
+
+cc_binary {
+    name: "android.hardware.media.c2-mtk-service",
+    defaults: [
+        "libcodec2-hidl-defaults",
+        "libcodec2-aidl-defaults",
+    ],
+    vendor: true,
+    relative_install_path: "hw",
+
+    init_rc: ["android.hardware.media.c2-mtk-service.rc"],
+    vintf_fragments: ["manifest_media_c2_mtk.xml"],
+
+    required: [
+        "android.hardware.media.c2-default-seccomp_policy",
+        "crash_dump.policy",
+    ],
+
+    srcs: [
+        "vendor.cpp",
+    ],
+
+    shared_libs: [
+        "libavservices_minijail",
+        "libbinder",
+        "libbinder_ndk",
+    ],
+}
