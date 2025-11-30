@@ -29,7 +29,25 @@ cc_binary {
         "libavservices_minijail",
         "libbinder",
         "libbinder_ndk",
+        "libcodec2_mtk_c2store",
+        "libcodec2_mtk_vdec",
+        "libcodec2_mtk_venc",
     ],
+}
+
+cc_library_shared {
+    name: "libcodec2_mtk_c2store",
+    soc_specific: true,
+}
+
+cc_library_shared {
+    name: "libcodec2_mtk_vdec",
+    soc_specific: true,
+}
+
+cc_library_shared {
+    name: "libcodec2_mtk_venc",
+    soc_specific: true,
 }
 
 prebuilt_etc {

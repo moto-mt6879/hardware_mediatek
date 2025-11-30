@@ -24,6 +24,8 @@
 #include <C2Component.h>
 #include <C2Config.h>
 
+#include "MTKC2Store.h"
+
 // HIDL
 #include <binder/ProcessState.h>
 #include <codec2/hidl/1.2/ComponentStore.h>
@@ -184,12 +186,9 @@ void runAidlService() {
     using namespace ::aidl::android::hardware::media::c2;
     std::shared_ptr<IComponentStore> store;
 
-    // TODO: Replace this with
-    // store = new utils::ComponentStore(
-    //         /* implementation of C2ComponentStore */);
     LOG(DEBUG) << "Instantiating Codec2's IComponentStore service...";
     store = ::ndk::SharedRefBase::make<utils::ComponentStore>(
-            std::make_shared<StoreImpl>());
+            android::GetCodec2MtkComponentStore());
 
     if (store == nullptr) {
         LOG(ERROR) << "Cannot create Codec2's IComponentStore service.";
@@ -225,12 +224,9 @@ void runHidlService() {
         using namespace ::android::hardware::media::c2::V1_2;
         sp<IComponentStore> store;
 
-        // TODO: Replace this with
-        // store = new utils::ComponentStore(
-        //         /* implementation of C2ComponentStore */);
         LOG(DEBUG) << "Instantiating Codec2's IComponentStore service...";
         store = new utils::ComponentStore(
-                std::make_shared<StoreImpl>());
+                android::GetCodec2MtkComponentStore());
 
         if (store == nullptr) {
             LOG(ERROR) << "Cannot create Codec2's IComponentStore service.";
@@ -251,7 +247,7 @@ void runHidlService() {
 }
 
 int main(int /* argc */, char** /* argv */) {
-    const bool aidlEnabled = ::aidl::android::hardware::media::c2::utils::IsEnabled();
+    const bool aidlEnabled = ::aidl::android::hardware::media::c2::utils::IsSelected();
     LOG(DEBUG) << "android.hardware.media.c2" << (aidlEnabled ? "-V1" : "@1.2")
                << "-service starting...";
 
