@@ -10,7 +10,7 @@ import java.util.List;
 
 public class OperatorCustomizationFactoryLoader {
     public static class OperatorFactoryInfo {
-        public OperatorFactoryInfo(String libName, String factoryName, String packageName, 
+        public OperatorFactoryInfo(String libName, String factoryName, String packageName,
                                    String operator) {}
     }
 

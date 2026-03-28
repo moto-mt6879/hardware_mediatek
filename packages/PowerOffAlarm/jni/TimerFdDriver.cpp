@@ -4,18 +4,17 @@
  */
 
 #include <android-base/unique_fd.h>
-#include <log/log.h>
 #include <jni.h>
+#include <log/log.h>
 
-#include <time.h>
-#include <string>
 #include <errno.h>
-#include <unistd.h>
 #include <linux/ioctl.h>
 #include <sys/timerfd.h>
+#include <time.h>
+#include <unistd.h>
+#include <string>
 
-extern "C" jboolean Java_org_lineageos_poweroffalarm_TimerFdDriver_isSupported(
-            JNIEnv*, jobject) {
+extern "C" jboolean Java_org_lineageos_poweroffalarm_TimerFdDriver_isSupported(JNIEnv*, jobject) {
 #ifdef CLOCK_POWER_OFF_ALARM
     return true;
 #else
@@ -23,8 +22,8 @@ extern "C" jboolean Java_org_lineageos_poweroffalarm_TimerFdDriver_isSupported(
 #endif
 }
 
-extern "C" void Java_org_lineageos_poweroffalarm_TimerFdDriver_set(
-            JNIEnv*, jobject, [[maybe_unused]] jlong time) {
+extern "C" void Java_org_lineageos_poweroffalarm_TimerFdDriver_set(JNIEnv*, jobject,
+                                                                   [[maybe_unused]] jlong time) {
 #ifdef CLOCK_POWER_OFF_ALARM
     android::base::unique_fd fd{timerfd_create(CLOCK_POWER_OFF_ALARM, TFD_NONBLOCK)};
     if (!fd.ok()) {
@@ -43,8 +42,7 @@ extern "C" void Java_org_lineageos_poweroffalarm_TimerFdDriver_set(
 #endif
 }
 
-extern "C" void Java_org_lineageos_poweroffalarm_TimerFdDriver_cancel(
-            JNIEnv*, jobject) {
+extern "C" void Java_org_lineageos_poweroffalarm_TimerFdDriver_cancel(JNIEnv*, jobject) {
 #ifdef CLOCK_POWER_OFF_ALARM
     android::base::unique_fd fd{timerfd_create(CLOCK_POWER_OFF_ALARM, TFD_NONBLOCK)};
     if (!fd.ok()) {
@@ -57,7 +55,7 @@ extern "C" void Java_org_lineageos_poweroffalarm_TimerFdDriver_cancel(
 #endif
 }
 
-extern "C" jlong Java_org_lineageos_poweroffalarm_TimerFdDriver_getRtcTimeOptional(
-            JNIEnv*, jobject) {
+extern "C" jlong Java_org_lineageos_poweroffalarm_TimerFdDriver_getRtcTimeOptional(JNIEnv*,
+                                                                                   jobject) {
     return -1L;
 }

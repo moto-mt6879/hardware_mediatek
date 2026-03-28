@@ -4,27 +4,25 @@
  */
 
 #include <android-base/unique_fd.h>
-#include <log/log.h>
 #include <jni.h>
+#include <log/log.h>
 
-#include <time.h>
-#include <string>
 #include <errno.h>
-#include <unistd.h>
 #include <linux/ioctl.h>
 #include <linux/rtc.h>
+#include <time.h>
+#include <unistd.h>
+#include <string>
 
 #define RTC_POFF_ALM_SET _IOW('p', 0x15, struct rtc_time)
 
 static std::string rtc_dev = "/dev/rtc0";
 
-extern "C" jboolean Java_org_lineageos_poweroffalarm_RtcDriver_isSupported(
-            JNIEnv*, jobject) {
+extern "C" jboolean Java_org_lineageos_poweroffalarm_RtcDriver_isSupported(JNIEnv*, jobject) {
     return access(rtc_dev.c_str(), F_OK) == 0;
 }
 
-extern "C" void Java_org_lineageos_poweroffalarm_RtcDriver_set(
-            JNIEnv*, jobject, jlong time) {
+extern "C" void Java_org_lineageos_poweroffalarm_RtcDriver_set(JNIEnv*, jobject, jlong time) {
     android::base::unique_fd fd{open(rtc_dev.c_str(), O_WRONLY)};
     if (!fd.ok()) {
         ALOGE("Unable to open %s: %s", rtc_dev.c_str(), strerror(errno));
@@ -54,13 +52,11 @@ extern "C" void Java_org_lineageos_poweroffalarm_RtcDriver_set(
     }
 }
 
-extern "C" void Java_org_lineageos_poweroffalarm_RtcDriver_cancel(
-            JNIEnv* env, jobject thiz) {
+extern "C" void Java_org_lineageos_poweroffalarm_RtcDriver_cancel(JNIEnv* env, jobject thiz) {
     Java_org_lineageos_poweroffalarm_RtcDriver_set(env, thiz, 0);
 }
 
-extern "C" jlong Java_org_lineageos_poweroffalarm_RtcDriver_getRtcTimeOptional(
-            JNIEnv*, jobject) {
+extern "C" jlong Java_org_lineageos_poweroffalarm_RtcDriver_getRtcTimeOptional(JNIEnv*, jobject) {
     android::base::unique_fd fd{open(rtc_dev.c_str(), O_RDWR)};
     if (!fd.ok()) {
         ALOGE("Unable to open %s: %s", rtc_dev.c_str(), strerror(errno));
